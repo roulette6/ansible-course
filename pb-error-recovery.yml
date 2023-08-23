@@ -1,0 +1,29 @@
+---
+
+- name: Fun with error recovery
+  hosts: ubu
+  gather_facts: true
+  become: true
+
+  tasks:
+    - name: Install packages
+      block:
+        - name: Install httpd and emacs
+          ansible.builtin.apt:
+            name:
+              - apache2
+              - emacs
+            update_cache: true
+            state: latest
+      rescue:
+        - name: Revert all installs
+          ansible.builtin.package:
+            name:
+              - httpd
+              - emacs
+            state: absent
+      always:
+        - name: Always tell me wassup
+          ansible.builtin.debug:
+            msg: Hey man, how is it going?
+

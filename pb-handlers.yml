@@ -1,0 +1,41 @@
+---
+
+- name: Fun with handlers
+  hosts: ubu
+  gather_facts: false
+  become: true
+  vars:
+    web_users:
+      - webuser1
+      - webuser2
+
+    db_users:
+      - dbuser1
+      - dbuser2
+
+  tasks:
+    - name: Create database users
+      ansible.builtin.group:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ db_users }}"
+      notify:
+        - Reboot system
+        - Reboot notice
+
+    - name: Create web users
+      ansible.builtin.group:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ web_users }}"
+      notify: Reboot system
+
+  handlers:
+
+    - name: Reboot notice
+      ansible.builtin.debug:
+        msg: "The system will be rebooted"
+
+    - name: Reboot system
+      ansible.builtin.reboot:
+

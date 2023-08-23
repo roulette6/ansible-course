@@ -1,0 +1,43 @@
+---
+
+- name: Create users in groups using loops
+  hosts: ubu
+  gather_facts: false
+  become: true
+  vars:
+    user_groups:
+      - flintstones
+      - rubbles
+    users:
+        - name: pebbles
+          groups: flintstones
+        - name: bammbamm
+          groups: flintstones
+        - name: chip
+          groups:
+            - flintstones
+            - rubbles
+        - name: roxy
+          groups:
+            - flintstones
+            - rubbles
+
+  tasks:
+    - name: Create groups
+      ansible.builtin.group:
+        name: "{{ item }}"
+      loop: "{{ user_groups }}"
+
+    - name: Create users in their appropriate groups
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        groups: "{{ item.groups }}"
+      loop: "{{ users }}"
+
+    - name: Loop through two things
+      ansible.builtin.debug:
+        msg: |-
+          group: {{ item.0 }}
+          name: {{ item.1.name }}
+      loop: "{{ user_groups | product(users) }}"
+
