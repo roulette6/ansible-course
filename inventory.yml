@@ -1,0 +1,7 @@
+---
+all:
+  children:
+    ubu:
+      hosts:
+        ans-managed:
+          ansible_host: 192.168.64.14
