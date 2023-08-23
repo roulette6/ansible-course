@@ -6,3 +6,4 @@ Ansible repo for testing things I learned so I can refer to them
 - **pb-long-strings.yml:** Print out strings to see the effect of different ways to break lines.
 - **pb-handlers.yml:** Use handlers
 - **pb-error-recovery.yml:** Use blocks to handle errors.
+- **pb-loops.yml:** Fun with loops, ya'll
