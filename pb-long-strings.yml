@@ -1,0 +1,65 @@
+---
+# See http://yaml-multiline.info/
+
+- name: Practice long strings
+  hosts: ubu
+  gather_facts: false
+  vars:
+    task_level: DHCP relay
+
+  tasks:
+    - name: Debug long URL w/o line break
+      ansible.builtin.debug:
+        msg: "https://ondemandelearning.cisco.com/\
+          cisco-cte/bgp/sections/14/pages/4"
+
+    - name: Debug a string with newlines and trailing new line
+      ansible.builtin.debug:
+        msg: |
+          Some say the world will end in fire,
+          Some say in ice.
+
+    - name: Debug a string with newlines and NO trailing new line
+      ansible.builtin.debug:
+        msg: |-
+          From what I’ve tasted of desire
+          I hold with those who favor fire.
+
+    - name: Debug a string without newlines and trailing new line
+      ansible.builtin.debug:
+        msg: >
+          But if it had to perish twice,
+          I think I know enough of hate
+
+    - name: Debug a string without newlines and NO trailing new line
+      ansible.builtin.debug:
+        msg: >-
+          To say that for destruction ice
+          Is also great
+          And would suffice.
+
+    - name: Debug a string with newlines and ALL trailing new line
+      ansible.builtin.debug:
+        msg: >+
+          The woods are lovely, dark and deep,
+          But I have promises to keep,
+          And miles to go before I sleep,
+          And miles to go before I sleep.
+
+
+    - name: "{{ id_num }} - {{ task_level }} - set uri_suffix"
+      ansible.builtin.set_fact:
+        uri_suffix: >-
+          {{ '{{ id_num }}-{{ site }}'
+          if task_level == 'T1s' or task_level == 'DHCP relay'
+          else '{{ id_num }}-{{ site }}_{{ segname }}'
+          if task_level == 'Segments'
+          else '{{ id }}/rules/{{ id_num }}'
+          if task_level == 'DFW'
+          else '{{ id_num }}-{{ site }}/locale-services/{{ foo }}'
+          if task_level == 'LocaleServices' }}
+
+    - name: Debug uri_suffix
+      ansible.builtin.debug:
+        var: uri_suffix
+
