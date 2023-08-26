@@ -6,4 +6,16 @@ id: UID012345
 id_num: 666
 segname: desktop
 site: mars
+vim_options:
+  - 'ai                          " Set autoindent'
+  - 'backspace=indent,eol,start  " Make backspace behave like every other editor'
+  - 'hlsearch                    " highlight search results'
+  - 'incsearch                   " incremental search'
+  - 'number                      " line numbers'
+  - 'cursorline'
+  - 'noshowmode'
+  - 'tabstop=4'
+  - 'expandtab'
+  - 'softtabstop=4'
+  - 'shiftwidth=4'
 

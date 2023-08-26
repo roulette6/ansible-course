@@ -1,0 +1,36 @@
+---
+
+- name: Fun with templates
+  hosts: ubu
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Create a customized .vimrc file
+      ansible.builtin.template:
+        src: templates/vim.j2
+        dest: /home/ubuntu/.vimrc
+        owner: ubuntu
+        group: ubuntu
+        mode: "0644"
+
+    - name: Create a MOTD file
+      ansible.builtin.template:
+        src: templates/motd.j2
+        dest: /etc/motd
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Lookup plugin with a query
+      debug:
+        msg: "An MX record is : {{ item }}"
+      loop: "{{ query('dig', 'gmail.com', 'qtype=MX') }}"
+
+    - name: Queries return YAML list
+      debug:
+        msg: "{{ query('dig', 'gmail.com', 'qtype=MX') }}"
+
+    - name: Lookups return string with comma-separated values
+      debug:
+        msg: "{{ lookup('dig', 'gmail.com', 'qtype=MX') }}"
