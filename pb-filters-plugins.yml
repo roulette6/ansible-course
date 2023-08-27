@@ -1,0 +1,45 @@
+---
+
+- name: Fun with filters and plugins
+  hosts: ubu
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Lookup plugin with a query
+      debug:
+        msg: "An MX record is : {{ item }}"
+      loop: "{{ query('dig', 'gmail.com', 'qtype=MX') }}"
+
+    - name: Queries return YAML list
+      debug:
+        msg: "{{ query('dig', 'gmail.com', 'qtype=MX') }}"
+
+    - name: Lookups return string with comma-separated values
+      debug:
+        msg: "{{ lookup('dig', 'gmail.com', 'qtype=MX') }}"
+
+    - name: Load the contents of a file into a var and put it somewhere
+      ansible.builtin.authorized_key:
+        user: ubuntu
+        key: "{{ lookup('file', './ssh-key.pub') }}"
+
+    - name: Print the name of each account in ./accounts.txt
+      ansible.builtin.debug:
+        msg: "A user is {{ item | regex_replace(':.*$') }}"
+      loop: "{{ query('lines', 'cat ./accounts.txt') }}"
+
+    - name: Print "Hello Class!"
+      ansible.builtin.debug:
+        msg: "{{ lookup('template', 'hello.j2') }}"
+      vars:
+        my_name: class
+
+    - name: Display Amazon IPv4 ranges
+      ansible.builtin.debug:
+        msg: "{{ item['ip_prefix'] }}"
+      loop: "{{ ip_ranges['prefixes'] }}"
+      vars:
+        ip_ranges: "{{ lookup('url',
+          'https://ip-ranges.amazonaws.com/ip-ranges.json',
+          split_lines=False) }}"
