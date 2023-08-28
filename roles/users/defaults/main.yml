@@ -1,0 +1,7 @@
+---
+# defaults file for roles/users
+users:
+  - rufus
+  - maisy
+  - cony
+state: present

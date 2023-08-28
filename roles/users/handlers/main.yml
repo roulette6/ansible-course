@@ -1,0 +1,6 @@
+---
+
+# handlers file for roles/users
+- name: Pretend to reboot system
+  ansible.builtin.debug:
+    msg: Rebooting system

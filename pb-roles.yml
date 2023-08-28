@@ -1,0 +1,12 @@
+---
+
+- name: Fun with filters and plugins
+  hosts: ubu
+  become: true
+  gather_facts: true
+
+  roles:
+    - role: users
+      vars:
+        users: "{{ web_users }}"
+        state: present

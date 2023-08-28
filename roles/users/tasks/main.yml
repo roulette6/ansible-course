@@ -1,0 +1,9 @@
+---
+# tasks file for roles/users
+
+- name: Create users
+  ansible.builtin.user:
+    name: "{{ item }}"
+    state: "{{ state }}"
+  loop: "{{ users }}"
+  notify: Pretend to reboot system
